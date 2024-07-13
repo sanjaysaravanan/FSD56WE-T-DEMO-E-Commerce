@@ -1,6 +1,7 @@
 // src/app/store.js
 import { configureStore } from "@reduxjs/toolkit";
 import cartReducer from "./reducers/cart.js";
+import accountReducer from "./reducers/account.js";
 
 // store to Local Storage
 // Redux Middleware Fucntion
@@ -29,6 +30,7 @@ const loadFromStorage = () => {
 const store = configureStore({
   reducer: {
     cart: cartReducer,
+    account: accountReducer,
   },
   devTools: true,
   middleware: (defaultMiddlewareFn) => {

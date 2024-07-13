@@ -9,9 +9,13 @@ const CartItem = ({
   category,
   sellerInfo,
   qty,
+  animDelay,
 }) => {
   return (
-    <div className="card mb-3 from-right-animation">
+    <div
+      className="card mb-3 from-right-animation"
+      style={{ animationDelay: `${animDelay}ms` }}
+    >
       <div className="row g-0">
         <div className="col-md-4 text-center">
           <img
@@ -47,6 +51,7 @@ CartItem.propTypes = {
   category: PropTypes.oneOf(["electronics", "sports", "fashion"]).isRequired,
   sellerInfo: PropTypes.string.isRequired,
   qty: PropTypes.number.isRequired,
+  animDelay: PropTypes.number.isRequired,
 };
 
 export default CartItem;

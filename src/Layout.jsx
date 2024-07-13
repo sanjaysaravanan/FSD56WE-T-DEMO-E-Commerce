@@ -1,5 +1,5 @@
-import { useSelector } from "react-redux";
-import { Link, Outlet } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const CartLink = () => {
   const { totalQty } = useSelector((state) => state.cart);
@@ -12,6 +12,15 @@ const CartLink = () => {
 };
 
 const Layout = () => {
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch({ type: "account_logout" });
+    navigate("/login");
+  };
+
   return (
     <div>
       <header className="z-3 bg-dark text-white p-3 mb-4 position-sticky top-0">
@@ -36,7 +45,18 @@ const Layout = () => {
               Search
             </button>
           </form>
-          <CartLink />
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <CartLink />
+            {/* tabindex is used to specify nav items using tab key */}
+            <i
+              tabIndex={0}
+              className="fa-solid fa-right-from-bracket fa-2x mx-3"
+              onClick={handleLogout}
+              style={{
+                cursor: "pointer",
+              }}
+            ></i>
+          </div>
         </div>
       </header>
       <div style={{ minHeight: "100vh" }}>
