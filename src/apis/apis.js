@@ -1,6 +1,9 @@
 import instance from "../api-instance";
 
-const handledAPIPost = async (path, payload) => {
+const handledAPIPost = async (
+  path,
+  payload = { test: "Nothing But Test Object" }
+) => {
   try {
     const resposne = await instance.post(path, payload);
 
