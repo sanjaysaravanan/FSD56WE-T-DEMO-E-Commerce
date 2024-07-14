@@ -1,7 +1,10 @@
 import PropTypes from "prop-types";
 
-import products from "../json-data/products.json";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { handledAPIGet } from "../apis/apis";
+import { useSelector } from "react-redux";
+import ProductForm from "../components/ProductForm";
 
 const Product = ({ name, price, images, animDelay = 0 }) => {
   return (
@@ -36,14 +39,73 @@ Product.propTypes = {
 };
 
 const ProductListing = () => {
+  const { userInfo = { userType: "customer", userId: "" } } = useSelector(
+    (state) => state.account || {}
+  );
+
+  const [openForm, setFormState] = useState(false);
+
+  const [products, setProducts] = useState([]);
+
+  const loadProducts = async () => {
+    try {
+      const products = await handledAPIGet(
+        userInfo.userType === "seller"
+          ? `/products/seller/${userInfo.userId}`
+          : "/products/available"
+      );
+
+      setProducts(products);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
   return (
     <div className="container mt-5">
       <h1>Products Page</h1>
-      {products.map((product, index) => (
-        <Link key={product.sku} to={`/products/${product.sku}`}>
-          <Product {...product} animDelay={index * 200} />
-        </Link>
-      ))}
+      <button onClick={() => setFormState(true)} className="btn btn-primary">
+        Add New Product
+      </button>
+      {openForm && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            height: "100vh",
+            width: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            placeItems: "center",
+            placeContent: "center",
+            zIndex: 9999,
+          }}
+        >
+          <div
+            className="bg-white p-4"
+            style={{ minWidth: 500, height: 600, overflowY: "scroll" }}
+          >
+            <button onClick={() => setFormState(false)}>X</button>
+            <ProductForm />
+          </div>
+        </div>
+      )}
+      <div className="container m-2">
+        {products.map((product, index) =>
+          userInfo.userType === "seller" ? (
+            <Product key={product.sku} {...product} animDelay={index * 200} />
+          ) : (
+            <Link key={product.sku} to={`/products/${product.sku}`}>
+              <Product {...product} animDelay={index * 200} />
+            </Link>
+          )
+        )}
+      </div>
     </div>
   );
 };

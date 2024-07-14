@@ -16,6 +16,11 @@ function cartReducer(state = initialState, action) {
         ...state,
         products: state.products.toSpliced(action.index, 1),
       };
+    case "cart_clear":
+      return {
+        products: [],
+        totalQty: 0,
+      };
     default:
       return state;
   }

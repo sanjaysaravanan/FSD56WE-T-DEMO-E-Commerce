@@ -9,6 +9,9 @@ const Loader = () => {
         display: "flex",
         placeContent: "center",
         placeItems: "center",
+        position: "fixed",
+        top: 0,
+        left: 0,
       }}
     >
       <i className="fa-solid fa-spinner fa-spin fa-3x"></i>

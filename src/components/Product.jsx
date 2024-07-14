@@ -45,7 +45,7 @@ const Product = ({
           data-ride="carousel"
         >
           <div className="carousel-inner">
-            {images.map((image, index) => (
+            {(images || []).map((image, index) => (
               <div
                 key={index}
                 className={`carousel-item ${index === 0 ? "active" : ""}`}
@@ -88,7 +88,7 @@ const Product = ({
             <span className="sr-only">Next</span>
           </a>
         </div>
-        <h3 className="mt-3">Price: ${price.toFixed(2)}</h3>
+        <h3 className="mt-3">Price: ${(price || 0).toFixed(2)}</h3>
         <p>{description}</p>
         <p>Available Quantity: {availableQty}</p>
         <p>
@@ -99,7 +99,7 @@ const Product = ({
         </p>
         <div className="seller-info mt-3">
           <h5>Seller Information</h5>
-          <p>{sellerInfo}</p>
+          <p>{sellerInfo?.name || ""}</p>
         </div>
         <select name="qty" onChange={(e) => setQty(e.target.value)}>
           {Array.from(new Array(10)).map((v, index) => (

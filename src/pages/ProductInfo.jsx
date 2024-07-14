@@ -1,12 +1,35 @@
 import { useParams } from "react-router-dom";
 import Product from "../components/Product";
 
-import Products from "../json-data/products.json";
+import { useEffect, useState } from "react";
+import { handledAPIGet } from "../apis/apis";
+import Loader from "../components/Loader";
 
 const ProductInfo = () => {
   const { productSku } = useParams();
 
-  const currentProduct = Products.find((pd) => productSku === pd.sku);
+  const [loading, setLoading] = useState(false);
+
+  const [currentProduct, setProduct] = useState({});
+
+  const loadProduct = async () => {
+    try {
+      setLoading(true);
+      const product = await handledAPIGet(`/products/available/${productSku}`);
+      setProduct(product);
+      setLoading(false);
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  useEffect(() => {
+    loadProduct();
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="m-4">

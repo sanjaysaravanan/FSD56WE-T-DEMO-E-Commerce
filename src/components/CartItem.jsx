@@ -32,7 +32,7 @@ const CartItem = ({
             <p className="card-text">Price: ${price.toFixed(2)}</p>
             <p className="card-text">Description: {description}</p>
             <p className="card-text">Category: {category}</p>
-            <p className="card-text">Seller Info: {sellerInfo}</p>
+            <p className="card-text">Seller Info: {sellerInfo.name}</p>
             <p className="card-text">Quantity: {qty}</p>
             <p className="fw-bold card-text ">Subtotal: ${qty * price}</p>
           </div>

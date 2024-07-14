@@ -8,4 +8,15 @@ const instance = axios.create({
   },
 });
 
+instance.interceptors.request.use(
+  (config) => {
+    config.headers["Authorization"] = localStorage.getItem("authToken");
+    return config;
+  },
+  (error) => {
+    // Do something with request error
+    return Promise.reject(error);
+  }
+);
+
 export default instance;

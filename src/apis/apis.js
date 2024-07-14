@@ -22,6 +22,7 @@ const handledAPIGet = async (path) => {
     return resposne.data;
   } catch (err) {
     console.error(err);
+    throw new Error(err.response.data.msg);
   }
 };
 

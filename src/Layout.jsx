@@ -4,6 +4,12 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 const CartLink = () => {
   const { totalQty } = useSelector((state) => state.cart);
 
+  const { userInfo } = useSelector((state) => state.account);
+
+  if (userInfo.userType === "seller") {
+    return "";
+  }
+
   return (
     <Link to="/cart" className="btn btn-outline-light">
       <i className="fa-solid fa-cart-shopping"></i>&nbsp;({totalQty})

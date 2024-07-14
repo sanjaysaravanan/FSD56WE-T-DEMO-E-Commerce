@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { handledAPIPost } from "../apis/apis";
 import { useDispatch } from "react-redux";
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -19,8 +20,14 @@ const Login = () => {
 
     try {
       const response = await handledAPIPost("/login", { email, password });
-      alert(response.msg);
-      dispatch({ type: "account_authenticate", userInfo: {} });
+      const { msg, userToken } = response;
+      localStorage.setItem("authToken", userToken);
+
+      alert(msg);
+      dispatch({
+        type: "account_authenticate",
+        userInfo: jwtDecode(userToken),
+      });
       navigate("/");
     } catch (err) {
       alert(err.message);

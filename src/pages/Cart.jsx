@@ -1,13 +1,37 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CartItem from "../components/CartItem";
+import { handledAPIPost } from "../apis/apis";
+import { useState } from "react";
+import Loader from "../components/Loader";
 
 const Cart = () => {
-  const { products = [] } = useSelector((state) => state.cart);
+  const cart = useSelector((state) => state.cart);
+
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const processOrder = async () => {
+    try {
+      setLoading(true);
+      const response = await handledAPIPost("/order/place-order", cart);
+      alert(response.msg);
+      dispatch({ type: "cart_clear" });
+    } catch (err) {
+      alert("Something went wrong, Please try again later");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="container mt-5">
       <h1>Shopping Cart</h1>
-      {products.map((item, index) => (
+      {(cart.products || []).map((item, index) => (
         <CartItem
           key={index}
           name={item.name}
@@ -21,7 +45,7 @@ const Cart = () => {
           animDelay={index * 250}
         />
       ))}
-      {products.length > 0 && (
+      {cart.products.length > 0 && (
         <div
           style={{
             display: "flex",
@@ -31,9 +55,12 @@ const Cart = () => {
           className="mb-4"
         >
           <h4>
-            Grand Total: ${products.reduce((p, c) => p + c.qty * c.price, 0)}
+            Grand Total: $
+            {cart.products.reduce((p, c) => p + c.qty * c.price, 0)}
           </h4>
-          <button className="btn btn-primary">Place Order</button>
+          <button onClick={processOrder} className="btn btn-primary">
+            Place Order
+          </button>
         </div>
       )}
     </div>
