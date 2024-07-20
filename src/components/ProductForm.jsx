@@ -11,32 +11,54 @@ const ProductForm = () => {
     category: "electronics",
   });
 
+  const [errors, setErrors] = useState({
+    name: "",
+    sku: "",
+    price: "",
+    description: "",
+    images: "",
+    availableQty: "",
+    category: "electronics",
+  });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProduct({
       ...product,
       [name]: value,
     });
+    setErrors({
+      ...errors,
+      [name]: "",
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Convert images from a comma-separated string to an array
-    const productData = {
-      ...product,
-      images: product.images.split(",").map((img) => img.trim()),
-    };
 
-    await handledAPIPost("/products", productData);
-    setProduct({
-      name: "",
-      sku: "",
-      price: "",
-      description: "",
-      images: "",
-      availableQty: "",
-      category: "electronics",
-    });
+    if (product.name === "") {
+      setErrors({
+        ...errors,
+        name: "This is required",
+      });
+    } else {
+      // Convert images from a comma-separated string to an array
+      const productData = {
+        ...product,
+        images: product.images.split(",").map((img) => img.trim()),
+      };
+
+      await handledAPIPost("/products", productData);
+      setProduct({
+        name: "",
+        sku: "",
+        price: "",
+        description: "",
+        images: "",
+        availableQty: "",
+        category: "electronics",
+      });
+    }
   };
 
   return (
@@ -51,8 +73,9 @@ const ProductForm = () => {
             name="name"
             value={product.name}
             onChange={handleChange}
-            required
           />
+          <br />
+          <span style={{ color: "red" }}>{errors.name}</span>
         </div>
         <div className="mb-3">
           <label className="form-label">SKU</label>
@@ -62,7 +85,6 @@ const ProductForm = () => {
             name="sku"
             value={product.sku}
             onChange={handleChange}
-            required
           />
         </div>
         <div className="mb-3">
@@ -73,7 +95,6 @@ const ProductForm = () => {
             name="price"
             value={product.price}
             onChange={handleChange}
-            required
           />
         </div>
         <div className="mb-3">
@@ -103,7 +124,6 @@ const ProductForm = () => {
             name="availableQty"
             value={product.availableQty}
             onChange={handleChange}
-            required
           />
         </div>
         <div className="mb-3">
@@ -113,7 +133,6 @@ const ProductForm = () => {
             name="category"
             value={product.category}
             onChange={handleChange}
-            required
           >
             <option value="electronics">Electronics</option>
             <option value="fashion">Fashion</option>
