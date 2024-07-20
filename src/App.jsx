@@ -27,6 +27,7 @@ const ProductListing = lazy(() => import("./pages/ProductListing"));
 const UserProfile = lazy(() => import("./pages/UserProfile"));
 const Cart = lazy(() => import("./pages/Cart"));
 const ProductInfo = lazy(() => import("./pages/ProductInfo"));
+const OrderSuccess = lazy(() => import("./pages/OrderSuccess"));
 
 const ProtectedComponent = ({ component }) => {
   const { authenticated } = useSelector((state) => state.account);
@@ -61,6 +62,10 @@ function App() {
               <Route
                 path="/cart"
                 element={<ProtectedComponent component={<Cart />} />}
+              />
+              <Route
+                path="/orderSuccess"
+                element={<ProtectedComponent component={<OrderSuccess />} />}
               />
               <Route
                 path="/products/:productSku"
